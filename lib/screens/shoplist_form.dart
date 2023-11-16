@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:shopping_list/screens/menu.dart';
 import 'package:shopping_list/widgets/left_drawer.dart';
 
 class ShopFormPage extends StatefulWidget {
@@ -15,6 +20,8 @@ class _ShopFormPageState extends State<ShopFormPage> {
   String _description = "";
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+
     return Scaffold(
         appBar: AppBar(
           title: const Center(
@@ -111,37 +118,34 @@ class _ShopFormPageState extends State<ShopFormPage> {
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.indigo),
                     ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Product successfully saved'),
-                              content: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Name: $_name'),
-                                    Text('Price: $_price'),
-                                    Text('Description: $_description'),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
+                    onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                        // Send request to Django and wait for the response
+                        final response = await request.postJson(
+                        "http://muhammad-oka-tutorial.pbp.cs.ui.ac.id/create-flutter/",
+                        jsonEncode(<String, String>{
+                            'name': _name,
+                            'price': _price.toString(),
+                            'description': _description,
+                        }));
+                        if (response['status'] == 'success') {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                            content: Text("New product has saved successfully!"),
+                            ));
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => MyHomePage()),
                             );
-                          },
-                        );
-                        _formKey.currentState!.reset();
-                      }
-                    },
+                        } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                                content:
+                                    Text("Something went wrong, please try again."),
+                            ));
+                        }
+                    }
+                },
                     child: const Text(
                       "Save",
                       style: TextStyle(color: Colors.white),
