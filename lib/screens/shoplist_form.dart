@@ -119,33 +119,35 @@ class _ShopFormPageState extends State<ShopFormPage> {
                       backgroundColor: MaterialStateProperty.all(Colors.indigo),
                     ),
                     onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
+                      if (_formKey.currentState!.validate()) {
                         // Send request to Django and wait for the response
                         final response = await request.postJson(
-                        "http://muhammad-oka-tutorial.pbp.cs.ui.ac.id/create-flutter/",
-                        jsonEncode(<String, String>{
-                            'name': _name,
-                            'price': _price.toString(),
-                            'description': _description,
-                        }));
+                            "http://muhammad-oka-tutorial.pbp.cs.ui.ac.id/create-flutter/",
+                            jsonEncode(<String, String>{
+                              'name': _name,
+                              'price': _price.toString(),
+                              'description': _description,
+                            }));
                         if (response['status'] == 'success') {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                            content: Text("New product has saved successfully!"),
-                            ));
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (context) => MyHomePage()),
-                            );
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content:
+                                Text("New product has saved successfully!"),
+                          ));
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyHomePage()),
+                          );
                         } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                                content:
-                                    Text("Something went wrong, please try again."),
-                            ));
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content:
+                                Text("Something went wrong, please try again."),
+                          ));
                         }
-                    }
-                },
+                      }
+                    },
                     child: const Text(
                       "Save",
                       style: TextStyle(color: Colors.white),
