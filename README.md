@@ -1,4 +1,7 @@
-# shopping_list
+# [shopping_list_mobile](https://install.appcenter.ms/orgs/shopping-list-kawijayaa/apps/shopping-list/distribution_groups/public)
+
+[![Release](https://github.com/kawijayaa/shopping_list_mobile/actions/workflows/release.yml/badge.svg)](https://github.com/kawijayaa/shopping_list_mobile/actions/workflows/release.yml)
+[![Build status](https://build.appcenter.ms/v0.1/apps/e1d683d2-c032-42d5-a605-713bc3e57ca7/branches/main/badge)](https://appcenter.ms)
 
 A new Flutter project.
 
